@@ -14,5 +14,6 @@ func LoadEnv() {
 }
 
 func Get(key string) string {
+	LoadEnv()
 	return os.Getenv(key)
 }

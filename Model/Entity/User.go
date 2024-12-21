@@ -3,7 +3,7 @@ package entity
 import (
 	database "NotesBuddy/Database"
 	dto "NotesBuddy/Model/Dto"
-	"fmt"
+	"errors"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/net/context"
@@ -21,7 +21,7 @@ type User struct {
 func (request *User) CreateUser(ctx *context.Context) error {
 	conn, err := database.ConnectDB(ctx)
 	if err != nil {
-		return err
+		return errors.New(err.Error())
 	}
 
 	collection := conn.Database("hackmate").Collection("users")
@@ -34,11 +34,11 @@ func (request *User) CreateUser(ctx *context.Context) error {
 		{Key: "college", Value: request.College},
 		{Key: "age", Value: request.Age},
 	}
-	result, er := collection.InsertOne(*ctx, document)
+
+	_, er := collection.InsertOne(*ctx, document)
 	if er != nil {
 		return er
 	}
 
-	fmt.Println(result)
 	return nil
 }
