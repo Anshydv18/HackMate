@@ -1,11 +1,14 @@
 package entity
 
 import (
+	constants "NotesBuddy/Constants"
 	database "NotesBuddy/Database"
 	dto "NotesBuddy/Model/Dto"
 	"errors"
+	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/net/context"
 )
 
@@ -19,12 +22,10 @@ type User struct {
 }
 
 func (request *User) CreateUser(ctx *context.Context) error {
-	conn, err := database.ConnectDB(ctx)
+	collection, err := database.ConnectDB(ctx, constants.COLLECTION_USERS)
 	if err != nil {
 		return errors.New(err.Error())
 	}
-
-	collection := conn.Database("hackmate").Collection("users")
 
 	document := bson.D{
 		{Key: "name", Value: request.Name},
@@ -41,4 +42,22 @@ func (request *User) CreateUser(ctx *context.Context) error {
 	}
 
 	return nil
+}
+
+func IsUserAlreadyExists(ctx *context.Context, phone string) (bool, error) {
+	collection, err := database.ConnectDB(ctx, constants.COLLECTION_USERS)
+	if err != nil {
+		return false, err
+	}
+
+	filter := bson.M{
+		"phone": phone,
+	}
+
+	er := collection.FindOne(*ctx, filter).Err()
+	if er != nil && er != mongo.ErrNoDocuments {
+		return false, er
+	}
+	fmt.Println(er)
+	return true, nil
 }

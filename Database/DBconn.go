@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func ConnectDB(ctx *context.Context) (*mongo.Client, error) {
+func ConnectDB(ctx *context.Context, collection string) (*mongo.Collection, error) {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 
 	UriEnv := env.Get(constants.MONGODBURI)
@@ -21,5 +21,6 @@ func ConnectDB(ctx *context.Context) (*mongo.Client, error) {
 		return nil, errors.New("mongodb connection failed")
 	}
 
-	return clients, nil
+	collectionInstance := clients.Database(constants.DB_NAME).Collection(collection)
+	return collectionInstance, nil
 }

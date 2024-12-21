@@ -5,7 +5,6 @@ import (
 	utils "NotesBuddy/Utils"
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,8 +25,6 @@ func (request *UserProfileRequest) Initiate(c *gin.Context, key string) (*contex
 	if err := c.ShouldBindJSON(&request); err != nil {
 		return nil, err
 	}
-
-	fmt.Println(request)
 
 	return &ctx, nil
 }

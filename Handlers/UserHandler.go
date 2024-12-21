@@ -25,7 +25,7 @@ func CreateUserProfile(c *gin.Context) {
 	}
 
 	if er := services.CreateUserProfile(ctx, request); er != nil {
-		c.JSON(http.StatusBadRequest, er)
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, er.Error(), request))
 		return
 	}
 
