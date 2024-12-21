@@ -7,7 +7,7 @@ func IsValidPhone(phone string) bool {
 
 	re := regexp.MustCompile(PhonePattern)
 
-	return re.MatchString(PhonePattern)
+	return re.MatchString(phone)
 }
 
 func IsValidEmail(email string) bool {

@@ -12,5 +12,5 @@ func main() {
 	router.Use(middlewares.SetContext())
 	routes.UserRoutes(router)
 
-	router.Run(":8000")
+	router.Run(":3000")
 }

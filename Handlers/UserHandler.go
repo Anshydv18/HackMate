@@ -19,10 +19,10 @@ func CreateUserProfile(c *gin.Context) {
 		return
 	}
 
-	// if err := request.Validate(ctx); err != nil {
-	// 	c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
-	// 	return
-	// }
+	if err := request.Validate(ctx); err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		return
+	}
 
 	if er := services.CreateUserProfile(ctx, request); er != nil {
 		c.JSON(http.StatusBadRequest, er)

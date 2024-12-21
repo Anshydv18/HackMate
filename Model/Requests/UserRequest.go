@@ -5,14 +5,15 @@ import (
 	utils "NotesBuddy/Utils"
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UserProfileRequest struct {
 	Name       string          `json:"name"`
-	College    string          `json:"college ,omitempty"`
-	TechStacks []dto.TechStack `json:"tech_stacks, omitempty"`
+	College    string          `json:"college"`
+	TechStacks []dto.TechStack `json:"tech_stacks"`
 	Phone      string          `json:"phone_number"`
 	Email      string          `json:"email"`
 	Age        int             `json:"age"`
@@ -22,9 +23,11 @@ func (request *UserProfileRequest) Initiate(c *gin.Context, key string) (*contex
 	_ctx, _ := c.Get("context")
 	ctx := _ctx.(context.Context)
 
-	if err := c.BindJSON(request); err != nil {
+	if err := c.ShouldBindJSON(&request); err != nil {
 		return nil, err
 	}
+
+	fmt.Println(request)
 
 	return &ctx, nil
 }
@@ -53,5 +56,6 @@ func (request *UserProfileRequest) Validate(ctx *context.Context) error {
 	if request.Age <= 5 {
 		return errors.New("age should be greater than 5")
 	}
+
 	return nil
 }

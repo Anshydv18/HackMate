@@ -4,6 +4,7 @@ import (
 	constants "NotesBuddy/Constants"
 	utils "NotesBuddy/Utils"
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -21,6 +22,8 @@ func SetContext() gin.HandlerFunc {
 
 		ctx = context.WithValue(ctx, constants.REQUESTIDKEY, requestId)
 		c.Set("context", ctx)
+
+		fmt.Println("Raw request body:", c.Request.Body)
 		c.Next()
 	}
 }
