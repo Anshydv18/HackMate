@@ -15,6 +15,7 @@ type UserProfileRequest struct {
 	TechStacks []dto.TechStack `json:"tech_stacks"`
 	Phone      string          `json:"phone_number"`
 	Email      string          `json:"email"`
+	Age        int             `json:"age"`
 }
 
 func (request *UserProfileRequest) Initiate(c *gin.Context, key string) (*context.Context, error) {
@@ -47,6 +48,10 @@ func (request *UserProfileRequest) Validate(ctx *context.Context) error {
 
 	if !utils.IsValidEmail(request.Email) {
 		return errors.New("enter a valid email")
+	}
+
+	if request.Age <= 5 {
+		return errors.New("age should be greater than 5")
 	}
 	return nil
 }
