@@ -11,8 +11,8 @@ import (
 
 type UserProfileRequest struct {
 	Name       string          `json:"name"`
-	College    string          `json:"college"`
-	TechStacks []dto.TechStack `json:"tech_stacks"`
+	College    string          `json:"college ,omitempty"`
+	TechStacks []dto.TechStack `json:"tech_stacks, omitempty"`
 	Phone      string          `json:"phone_number"`
 	Email      string          `json:"email"`
 	Age        int             `json:"age"`

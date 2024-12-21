@@ -13,7 +13,7 @@ type BaseResponse struct {
 
 func (r *BaseResponse) Fail(ctx *context.Context, key string, error string, request interface{}) *BaseResponse {
 	r.Status = false
-	r.Message = "Failed"
+	r.Message = error
 	r.Request = request
 	return r
 }

@@ -3,6 +3,7 @@ package entity
 import (
 	database "NotesBuddy/Database"
 	dto "NotesBuddy/Model/Dto"
+	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/net/context"
@@ -23,7 +24,7 @@ func (request *User) CreateUser(ctx *context.Context) error {
 		return err
 	}
 
-	collection := conn.Database("hackMate").Collection("users")
+	collection := conn.Database("hackmate").Collection("users")
 
 	document := bson.D{
 		{Key: "name", Value: request.Name},
@@ -33,10 +34,11 @@ func (request *User) CreateUser(ctx *context.Context) error {
 		{Key: "college", Value: request.College},
 		{Key: "age", Value: request.Age},
 	}
-	_, er := collection.InsertOne(*ctx, document)
+	result, er := collection.InsertOne(*ctx, document)
 	if er != nil {
 		return er
 	}
 
+	fmt.Println(result)
 	return nil
 }
