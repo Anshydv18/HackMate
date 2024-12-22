@@ -16,7 +16,7 @@ func (request *PhoneRequest) Initiate(c *gin.Context, key string) (*context.Cont
 	_ctx, _ := c.Get("context")
 	ctx := _ctx.(context.Context)
 
-	if err := c.BindJSON(&request); err != nil {
+	if err := c.ShouldBindJSON(&request); err != nil {
 		return nil, errors.New("failed while binding request")
 	}
 

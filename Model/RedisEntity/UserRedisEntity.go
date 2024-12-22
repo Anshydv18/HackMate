@@ -23,7 +23,7 @@ func GetUserFromCache(ctx *context.Context, phone string) (*dto.User, error) {
 	rdb := database.StartRedisServer()
 	result := rdb.Get(*ctx, key)
 
-	var UserDto dto.User
+	var UserDto *dto.User
 	err := json.Unmarshal([]byte(result.String()), &UserDto)
-	return &UserDto, err
+	return UserDto, err
 }
