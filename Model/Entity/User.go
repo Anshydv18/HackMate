@@ -5,10 +5,8 @@ import (
 	database "NotesBuddy/Database"
 	dto "NotesBuddy/Model/Dto"
 	"errors"
-	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/net/context"
 )
 
@@ -44,20 +42,23 @@ func (request *User) CreateUser(ctx *context.Context) error {
 	return nil
 }
 
-func IsUserAlreadyExists(ctx *context.Context, phone string) (bool, error) {
+func GetUserDetails(ctx *context.Context, phone string) (*dto.User, error) {
 	collection, err := database.ConnectDB(ctx, constants.COLLECTION_USERS)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
 	filter := bson.M{
 		"phone": phone,
 	}
 
-	er := collection.FindOne(*ctx, filter).Err()
-	if er != nil && er != mongo.ErrNoDocuments {
-		return false, er
+	res := collection.FindOne(*ctx, filter)
+
+	var user dto.User
+	er := res.Decode(&user)
+	if er != nil {
+		return nil, er
 	}
-	fmt.Println(er)
-	return true, nil
+
+	return &user, nil
 }
