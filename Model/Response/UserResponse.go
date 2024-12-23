@@ -6,7 +6,7 @@ import (
 )
 
 type UserResponse struct {
-	data *dto.User
+	Data *dto.User `json:"data"`
 	BaseResponse
 }
 
@@ -21,6 +21,6 @@ func (response *UserResponse) Fail(ctx *context.Context, Error error, key string
 func (response *UserResponse) Success(ctx *context.Context, key string, data *dto.User) *UserResponse {
 	response.Status = true
 	response.Message = key
-	response.data = data
+	response.Data = data
 	return response
 }
