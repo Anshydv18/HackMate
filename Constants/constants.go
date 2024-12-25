@@ -5,6 +5,7 @@ const (
 	RD_CONN      = "REDDIS_ADDR"
 	REQUESTIDKEY = "requestID"
 	RD_PASS      = "REDDIS_PASS"
+	JWT_TOKEN    = "JWT_KEY"
 )
 
 const ( //dbcrediantials
