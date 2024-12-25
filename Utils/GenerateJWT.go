@@ -10,7 +10,7 @@ import (
 
 var JWT_KEY = []byte(env.Get(constants.JWT_TOKEN))
 
-func generateJWTkey(Phone string) (string, error) {
+func GenerateJWTkey(Phone string) (string, error) {
 	claims := jwt.MapClaims{
 		"phone":  Phone,
 		"expire": time.Now().Add(1 * time.Hour).Unix(),

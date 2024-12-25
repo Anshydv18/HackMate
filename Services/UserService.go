@@ -45,5 +45,6 @@ func Login(ctx *context.Context, phone string) (*dto.User, error) {
 
 	data, err := entity.GetUserDetails(ctx, phone)
 	go redisentity.SetUserCache(ctx, data)
+
 	return data, err
 }

@@ -4,6 +4,7 @@ import (
 	requests "NotesBuddy/Model/Requests"
 	response "NotesBuddy/Model/Response"
 	services "NotesBuddy/Services"
+	utils "NotesBuddy/Utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -54,5 +55,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	jwtToken, _ := utils.GenerateJWTkey(request.Phone)
+	c.SetCookie(
+		"auth_token", jwtToken, 3600, "", "/", true, true,
+	)
 	c.JSON(http.StatusOK, response.Success(ctx, key, data))
 }
