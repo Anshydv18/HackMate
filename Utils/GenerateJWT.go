@@ -15,6 +15,6 @@ func GenerateJWTkey(Phone string) (string, error) {
 		"phone":  Phone,
 		"expire": time.Now().Add(1 * time.Hour).Unix(),
 	}
-	jwtToken := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return jwtToken.SignedString(JWT_KEY)
 }

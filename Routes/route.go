@@ -2,6 +2,7 @@ package routes
 
 import (
 	handlers "NotesBuddy/Handlers"
+	middlewares "NotesBuddy/Middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,4 +13,7 @@ func UserRoutes(router *gin.Engine) {
 	userAPI.POST("/createProfile", handlers.CreateUserProfile)
 	userAPI.POST("/login", handlers.Login)
 
+	protectedRoutes := userAPI.Group("private")
+	protectedRoutes.Use(middlewares.Authenticate())
+	protectedRoutes.GET("/getdetails", handlers.GetUserDetails)
 }

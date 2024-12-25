@@ -1,8 +1,9 @@
 package middlewares
 
 import (
+	response "NotesBuddy/Model/Response"
 	utils "NotesBuddy/Utils"
-	"errors"
+	"context"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,9 +13,12 @@ import (
 
 func Authenticate() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		_ctx, _ := c.Get("context")
+		ctx := _ctx.(context.Context)
+		response := response.BaseResponse{}
 		token_str, err := c.Cookie("auth_token")
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, errors.New("unauthorized person"))
+			c.JSON(http.StatusUnauthorized, response.Fail(&ctx, "authenticate", "unauthorized person", ""))
 			c.Abort()
 			return
 		}
@@ -27,7 +31,7 @@ func Authenticate() gin.HandlerFunc {
 		})
 
 		if err != nil || !tokenJWT.Valid {
-			c.JSON(http.StatusUnauthorized, errors.New("invalid token"))
+			c.JSON(http.StatusUnauthorized, response.Fail(&ctx, "authenticate", "unauthorized person", ""))
 			c.Abort()
 			return
 		}

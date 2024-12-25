@@ -55,9 +55,41 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	jwtToken, _ := utils.GenerateJWTkey(request.Phone)
+	jwtToken, err := utils.GenerateJWTkey(request.Phone)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, err, key, request))
+		return
+	}
+
 	c.SetCookie(
 		"auth_token", jwtToken, 3600, "", "/", true, true,
 	)
+	c.JSON(http.StatusOK, response.Success(ctx, key, data))
+}
+
+func GetUserDetails(c *gin.Context) {
+	key := "Login"
+	request := &requests.PhoneRequest{}
+	response := &response.UserResponse{}
+	ctx, err := request.Initiate(c, key)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, err, "initiation", request))
+		return
+	}
+
+	if err := request.Validate(ctx); err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, err, "initiation", request))
+		return
+	}
+
+	data, err := services.Login(ctx, request.Phone)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, err, key, request))
+		return
+	}
+	c.SetCookie(
+		"auth_token", "", 3600, "", "/", true, true,
+	)
+
 	c.JSON(http.StatusOK, response.Success(ctx, key, data))
 }
