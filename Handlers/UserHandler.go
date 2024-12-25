@@ -87,9 +87,6 @@ func GetUserDetails(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response.Fail(ctx, err, key, request))
 		return
 	}
-	c.SetCookie(
-		"auth_token", "", 3600, "", "/", true, true,
-	)
 
 	c.JSON(http.StatusOK, response.Success(ctx, key, data))
 }

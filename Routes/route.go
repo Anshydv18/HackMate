@@ -12,6 +12,7 @@ func UserRoutes(router *gin.Engine) {
 	userAPI := openRoutes.Group("/user")
 	userAPI.POST("/createProfile", handlers.CreateUserProfile)
 	userAPI.POST("/login", handlers.Login)
+	userAPI.POST("/sendMail", handlers.SendMessage)
 
 	protectedRoutes := userAPI.Group("private")
 	protectedRoutes.Use(middlewares.Authenticate())
