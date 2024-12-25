@@ -1,8 +1,8 @@
 package middlewares
 
 import (
-	constants "NotesBuddy/Constants"
-	utils "NotesBuddy/Utils"
+	constants "Hackmate/Constants"
+	utils "Hackmate/Utils"
 	"context"
 	"time"
 

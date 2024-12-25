@@ -1,10 +1,10 @@
 package services
 
 import (
-	dto "NotesBuddy/Model/Dto"
-	entity "NotesBuddy/Model/Entity"
-	redisentity "NotesBuddy/Model/RedisEntity"
-	requests "NotesBuddy/Model/Requests"
+	dto "Hackmate/Model/Dto"
+	entity "Hackmate/Model/Entity"
+	redisentity "Hackmate/Model/RedisEntity"
+	requests "Hackmate/Model/Requests"
 	"context"
 )
 

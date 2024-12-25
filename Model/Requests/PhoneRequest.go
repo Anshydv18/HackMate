@@ -1,7 +1,7 @@
 package requests
 
 import (
-	utils "NotesBuddy/Utils"
+	utils "Hackmate/Utils"
 	"context"
 	"errors"
 

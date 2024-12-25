@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	requests "NotesBuddy/Model/Requests"
-	response "NotesBuddy/Model/Response"
-	services "NotesBuddy/Services"
-	utils "NotesBuddy/Utils"
+	requests "Hackmate/Model/Requests"
+	response "Hackmate/Model/Response"
+	services "Hackmate/Services"
+	utils "Hackmate/Utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

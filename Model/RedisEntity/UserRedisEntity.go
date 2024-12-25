@@ -1,8 +1,8 @@
 package redisentity
 
 import (
-	database "NotesBuddy/Database"
-	dto "NotesBuddy/Model/Dto"
+	database "Hackmate/Database"
+	dto "Hackmate/Model/Dto"
 	"context"
 	"encoding/json"
 	"fmt"

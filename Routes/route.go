@@ -1,8 +1,8 @@
 package routes
 
 import (
-	handlers "NotesBuddy/Handlers"
-	middlewares "NotesBuddy/Middlewares"
+	handlers "Hackmate/Handlers"
+	middlewares "Hackmate/Middlewares"
 
 	"github.com/gin-gonic/gin"
 )

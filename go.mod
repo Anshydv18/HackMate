@@ -1,4 +1,4 @@
-module NotesBuddy
+module Hackmate
 
 go 1.23.3
 

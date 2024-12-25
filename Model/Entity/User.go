@@ -1,9 +1,9 @@
 package entity
 
 import (
-	constants "NotesBuddy/Constants"
-	database "NotesBuddy/Database"
-	dto "NotesBuddy/Model/Dto"
+	constants "Hackmate/Constants"
+	database "Hackmate/Database"
+	dto "Hackmate/Model/Dto"
 	"errors"
 
 	"go.mongodb.org/mongo-driver/bson"

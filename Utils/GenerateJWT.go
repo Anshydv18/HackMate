@@ -1,8 +1,8 @@
 package utils
 
 import (
-	constants "NotesBuddy/Constants"
-	env "NotesBuddy/Env"
+	constants "Hackmate/Constants"
+	env "Hackmate/Env"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"

@@ -1,8 +1,8 @@
 package requests
 
 import (
-	dto "NotesBuddy/Model/Dto"
-	utils "NotesBuddy/Utils"
+	dto "Hackmate/Model/Dto"
+	utils "Hackmate/Utils"
 	"context"
 	"errors"
 

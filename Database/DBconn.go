@@ -1,8 +1,8 @@
 package database
 
 import (
-	constants "NotesBuddy/Constants"
-	env "NotesBuddy/Env"
+	constants "Hackmate/Constants"
+	env "Hackmate/Env"
 	"context"
 	"errors"
 

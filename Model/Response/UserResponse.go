@@ -1,7 +1,7 @@
 package response
 
 import (
-	dto "NotesBuddy/Model/Dto"
+	dto "Hackmate/Model/Dto"
 	"context"
 )
 

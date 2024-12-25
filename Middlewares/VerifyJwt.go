@@ -1,8 +1,8 @@
 package middlewares
 
 import (
-	response "NotesBuddy/Model/Response"
-	utils "NotesBuddy/Utils"
+	response "Hackmate/Model/Response"
+	utils "Hackmate/Utils"
 	"context"
 	"net/http"
 
