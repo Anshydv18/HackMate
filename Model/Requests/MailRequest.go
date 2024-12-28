@@ -8,7 +8,11 @@ import (
 )
 
 type MailRequest struct {
-	Mail []string `json:"mail"`
+	Mail           []string `json:"mail"`
+	SenderName     string   `json:"sender_name"`
+	ContactDetails string   `json:"contact_details"`
+	TeamName       string   `json:"team_name"`
+	Status         int      `json:"status"`
 }
 
 func (request *MailRequest) Initiate(c *gin.Context, key string) (*context.Context, error) {

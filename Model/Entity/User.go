@@ -51,7 +51,26 @@ func GetUserDetails(ctx *context.Context, phone string) (*dto.User, error) {
 	filter := bson.M{
 		"phone": phone,
 	}
+	res := collection.FindOne(*ctx, filter)
 
+	var user dto.User
+	er := res.Decode(&user)
+	if er != nil {
+		return nil, er
+	}
+
+	return &user, nil
+}
+
+func GetUserDetailsWithEmail(ctx *context.Context, email string) (*dto.User, error) {
+	collection, err := database.ConnectDB(ctx, constants.COLLECTION_USERS)
+	if err != nil {
+		return nil, err
+	}
+
+	filter := bson.M{
+		"email": email,
+	}
 	res := collection.FindOne(*ctx, filter)
 
 	var user dto.User

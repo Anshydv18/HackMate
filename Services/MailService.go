@@ -14,11 +14,24 @@ import (
 
 func SendMailService(ctx *context.Context, request *requests.MailRequest) error {
 
-	return SendMail(ctx, &dto.MailInfo{
-		To:     request.Mail,
-		Header: "HackMate Connect",
-	})
+	MailDetails := &dto.MailInfo{
+		SenderName:     request.SenderName,
+		ContactDetails: request.ContactDetails,
+		Header:         constants.MailHeader[request.Status],
+		To:             request.Mail,
+		ReciverName:    request.TeamName,
+	}
 
+	if MailDetails.ReciverName == "" {
+		UserDetail, err := GetUserByEmail(ctx, request.Mail[0])
+		if err != nil {
+			return errors.New("email fetching failed")
+		}
+		MailDetails.ReciverName = UserDetail.Name
+	}
+
+	go SendMail(ctx, MailDetails)
+	return nil
 }
 
 func SendMail(ctx *context.Context, request *dto.MailInfo) error {
@@ -42,7 +55,7 @@ func SendMail(ctx *context.Context, request *dto.MailInfo) error {
 	email := mail.NewMSG()
 	email.SetFrom(env.Get(constants.OWNER_MAIL))
 
-	emailContent := templates.GetCustomisedMessage(ctx, "Ansh", "Ankit", "phone number : 9569816212")
+	emailContent := templates.GetCustomisedMessage(ctx, request.ReciverName, request.SenderName, request.ContactDetails)
 
 	email.AddTo(request.To...)
 	email.AddCc(request.CC...)
