@@ -3,13 +3,30 @@ package services
 import (
 	constants "Hackmate/Constants"
 	env "Hackmate/Env"
+	dto "Hackmate/Model/Dto"
+	requests "Hackmate/Model/Requests"
+	templates "Hackmate/Templates"
 	"context"
 	"errors"
 
 	mail "github.com/xhit/go-simple-mail/v2"
 )
 
-func SendMail(ctx *context.Context, to string) error {
+func SendMailService(ctx *context.Context, request *requests.MailRequest) error {
+
+	return SendMail(ctx, &dto.MailInfo{
+		To:     request.Mail,
+		Header: "HackMate Connect",
+	})
+
+}
+
+func SendMail(ctx *context.Context, request *dto.MailInfo) error {
+
+	if len(request.To) == 0 {
+		errors.New("enter to addresses")
+	}
+
 	server := mail.NewSMTPClient()
 	server.Host = "smtp.gmail.com"
 	server.Port = 587
@@ -24,13 +41,15 @@ func SendMail(ctx *context.Context, to string) error {
 
 	email := mail.NewMSG()
 	email.SetFrom(env.Get(constants.OWNER_MAIL))
-	email.AddTo(to)
-	//email.AddCc([]string("another_you@example.com"))
-	email.SetSubject("New Go Email")
 
-	email.SetBody(mail.TextPlain, "hello guys ,i am with ur ")
-	if er := email.Send(smtpClient); er != nil {
-		return errors.New("send mail failed")
-	}
+	emailContent := templates.GetCustomisedMessage(ctx, "Ansh", "Ankit", "phone number : 9569816212")
+
+	email.AddTo(request.To...)
+	email.AddCc(request.CC...)
+	email.AddBcc(request.BCC...)
+	email.SetSubject(request.Header)
+	email.SetBody(mail.TextPlain, emailContent)
+
+	go email.Send(smtpClient)
 	return nil
 }

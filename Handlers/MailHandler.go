@@ -24,7 +24,7 @@ func SendMessage(c *gin.Context) {
 		return
 	}
 
-	if err := services.SendMail(ctx, request.Mail); err != nil {
+	if err := services.SendMailService(ctx, request); err != nil {
 		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
 		return
 	}
