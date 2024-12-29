@@ -5,7 +5,7 @@ import (
 )
 
 type StringResponse struct {
-	Data string `json:"data"`
+	Url string `json:"url"`
 	BaseResponse
 }
 
@@ -20,6 +20,6 @@ func (response *StringResponse) Fail(ctx *context.Context, key string, error str
 func (response *StringResponse) Success(ctx *context.Context, key string, url string) *StringResponse {
 	response.Status = true
 	response.Message = key
-	response.Data = url
+	response.Url = url
 	return response
 }
