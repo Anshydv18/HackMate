@@ -6,7 +6,7 @@ import (
 )
 
 type UserResponse struct {
-	Data *dto.User `json:"data"`
+	Data *dto.User `json:"user"`
 	BaseResponse
 }
 

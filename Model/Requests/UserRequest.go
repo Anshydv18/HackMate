@@ -18,6 +18,7 @@ type UserProfileRequest struct {
 	Age           int             `json:"age"`
 	GithubLink    string          `json:"github_link"`
 	PortfolioLink string          `json:"portfolio_link"`
+	ProfilePhoto  string          `json:"profile_photo"`
 }
 
 func (request *UserProfileRequest) Initiate(c *gin.Context, key string) (*context.Context, error) {

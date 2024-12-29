@@ -26,12 +26,12 @@ func CreateUserProfile(ctx *context.Context, request *requests.UserProfileReques
 
 	}
 	UserDto := dto.User{
-		Name:      request.Name,
-		College:   request.College,
-		Age:       request.Age,
-		TechStack: request.TechStacks,
-		Phone:     request.Phone,
-		Email:     request.Email,
+		Name:       request.Name,
+		College:    request.College,
+		Age:        request.Age,
+		TechStacks: request.TechStacks,
+		Phone:      request.Phone,
+		Email:      request.Email,
 	}
 
 	go redisentity.SetUserCache(ctx, request.Phone, &UserDto)
