@@ -24,3 +24,9 @@ var MailHeader = map[int]string{
 	3: "HireMate Support",
 	4: "Emergency",
 }
+
+const ( //cloudinary crediantials
+	CLOUDINARY_NAME           = "CLOUDINARY_NAME"
+	CLOUDINARY_API_KEY        = "CLOUDINARY_API_KEY"
+	CLOUDINARY_API_SECRET_KEY = "CLOUDINARY_API_SECRET_KEY"
+)

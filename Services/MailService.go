@@ -2,6 +2,7 @@ package services
 
 import (
 	constants "Hackmate/Constants"
+	database "Hackmate/Database"
 	env "Hackmate/Env"
 	dto "Hackmate/Model/Dto"
 	requests "Hackmate/Model/Requests"
@@ -9,6 +10,7 @@ import (
 	"context"
 	"errors"
 
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	mail "github.com/xhit/go-simple-mail/v2"
 )
 
@@ -65,4 +67,24 @@ func SendMail(ctx *context.Context, request *dto.MailInfo) error {
 
 	go email.Send(smtpClient)
 	return nil
+}
+
+func UploadPhoto(ctx *context.Context, request *requests.ImageRequest) (string, error) {
+	cld, err := database.CloudinaryConnect(ctx)
+	if err != nil {
+		return "", err
+	}
+	src, err := request.Image.Open()
+	if err != nil {
+		return "", err
+	}
+
+	resp, err := cld.Upload.Upload(*ctx, src, uploader.UploadParams{
+		PublicID: "profile" + request.Image.Filename,
+	})
+
+	if err != nil {
+		return "", err
+	}
+	return resp.SecureURL, nil
 }

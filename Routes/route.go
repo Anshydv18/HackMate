@@ -14,6 +14,7 @@ func UserRoutes(router *gin.Engine) {
 	userAPI.POST("/createProfile", handlers.CreateUserProfile)
 	userAPI.POST("/login", handlers.Login)
 	userAPI.POST("/sendMail", handlers.SendMessage)
+	userAPI.POST("/uploadDocuments", handlers.UploadPhoto)
 
 	protectedRoutes := userAPI.Group("private")
 	protectedRoutes.Use(middlewares.Authenticate())

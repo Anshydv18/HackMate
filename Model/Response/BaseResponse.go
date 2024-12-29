@@ -21,6 +21,5 @@ func (r *BaseResponse) Fail(ctx *context.Context, key string, error string, requ
 func (r *BaseResponse) Success(ctx *context.Context, key string, request interface{}) *BaseResponse {
 	r.Status = true
 	r.Message = "Success"
-	r.Request = request
 	return r
 }

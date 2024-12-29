@@ -31,3 +31,27 @@ func SendMessage(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response.Success(ctx, key, request))
 }
+
+func UploadPhoto(c *gin.Context) {
+	key := "upload photo"
+	request := &requests.ImageRequest{}
+	response := &response.StringResponse{}
+	ctx, err := request.Initiate(c, key)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		return
+	}
+
+	if err := request.Validate(ctx); err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		return
+	}
+
+	url, err := services.UploadPhoto(ctx, request)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		return
+	}
+
+	c.JSON(http.StatusOK, response.Success(ctx, key, url))
+}
