@@ -10,12 +10,14 @@ import (
 )
 
 type UserProfileRequest struct {
-	Name       string          `json:"name"`
-	College    string          `json:"college"`
-	TechStacks []dto.TechStack `json:"tech_stacks"`
-	Phone      string          `json:"phone_number"`
-	Email      string          `json:"email"`
-	Age        int             `json:"age"`
+	Name          string          `json:"name"`
+	College       string          `json:"college"`
+	TechStacks    []dto.TechStack `json:"tech_stacks"`
+	Phone         string          `json:"phone_number"`
+	Email         string          `json:"email"`
+	Age           int             `json:"age"`
+	GithubLink    string          `json:"github_link"`
+	PortfolioLink string          `json:"portfolio_link"`
 }
 
 func (request *UserProfileRequest) Initiate(c *gin.Context, key string) (*context.Context, error) {
