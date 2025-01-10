@@ -32,7 +32,7 @@ func SendMessage(c *gin.Context) {
 	c.JSON(http.StatusOK, response.Success(ctx, key, request))
 }
 
-func UploadPhoto(c *gin.Context) {
+func UploadMedia(c *gin.Context) {
 	key := "upload photo"
 	request := &requests.ImageRequest{}
 	response := &response.StringResponse{}
@@ -47,7 +47,7 @@ func UploadPhoto(c *gin.Context) {
 		return
 	}
 
-	url, err := services.UploadPhoto(ctx, request)
+	url, err := services.UploadMedia(ctx, request)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
 		return

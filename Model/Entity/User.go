@@ -1,8 +1,8 @@
 package entity
 
 import (
+	base "Hackmate/Base"
 	constants "Hackmate/Constants"
-	database "Hackmate/Database"
 	dto "Hackmate/Model/Dto"
 	"errors"
 
@@ -20,11 +20,12 @@ type User struct {
 }
 
 func (request *User) CreateUser(ctx *context.Context) error {
-	collection, err := database.ConnectDB(ctx, constants.COLLECTION_USERS)
-	if err != nil {
-		return errors.New(err.Error())
+	dbclient := base.DatabaseInstance
+	if dbclient == nil {
+		return errors.New("client error")
 	}
 
+	collection := dbclient.Database(constants.DB_NAME).Collection(constants.COLLECTION_USERS)
 	document := bson.D{
 		{Key: "name", Value: request.Name},
 		{Key: "email", Value: request.Email},
@@ -43,10 +44,12 @@ func (request *User) CreateUser(ctx *context.Context) error {
 }
 
 func GetUserDetails(ctx *context.Context, phone string) (*dto.User, error) {
-	collection, err := database.ConnectDB(ctx, constants.COLLECTION_USERS)
-	if err != nil {
-		return nil, err
+	dbclient := base.DatabaseInstance
+	if dbclient == nil {
+		return nil, errors.New("client error")
 	}
+
+	collection := dbclient.Database(constants.DB_NAME).Collection(constants.COLLECTION_USERS)
 
 	filter := bson.M{
 		"phone": phone,
@@ -63,10 +66,12 @@ func GetUserDetails(ctx *context.Context, phone string) (*dto.User, error) {
 }
 
 func GetUserDetailsWithEmail(ctx *context.Context, email string) (*dto.User, error) {
-	collection, err := database.ConnectDB(ctx, constants.COLLECTION_USERS)
-	if err != nil {
-		return nil, err
+	dbclient := base.DatabaseInstance
+	if dbclient == nil {
+		return nil, errors.New("client error")
 	}
+
+	collection := dbclient.Database(constants.DB_NAME).Collection(constants.COLLECTION_USERS)
 
 	filter := bson.M{
 		"email": email,

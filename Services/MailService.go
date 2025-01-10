@@ -69,7 +69,7 @@ func SendMail(ctx *context.Context, request *dto.MailInfo) error {
 	return nil
 }
 
-func UploadPhoto(ctx *context.Context, request *requests.ImageRequest) (string, error) {
+func UploadMedia(ctx *context.Context, request *requests.ImageRequest) (string, error) {
 	cld, err := database.CloudinaryConnect(ctx)
 	if err != nil {
 		return "", err
