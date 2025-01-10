@@ -12,13 +12,13 @@ import (
 type UserProfileRequest struct {
 	Name          string          `json:"name"`
 	College       string          `json:"college"`
-	TechStacks    []dto.TechStack `json:"tech_stacks"`
+	TechStacks    []dto.TechStack `json:"tech_stacks,omitempty"`
 	Phone         string          `json:"phone_number"`
 	Email         string          `json:"email"`
-	Age           int             `json:"age"`
-	GithubLink    string          `json:"github_link"`
-	PortfolioLink string          `json:"portfolio_link"`
-	ProfilePhoto  string          `json:"profile_photo"`
+	Age           int             `json:"age,omitempty"`
+	GithubLink    string          `json:"github_link,omitempty"`
+	PortfolioLink string          `json:"portfolio_link,omitempty"`
+	ProfilePhoto  string          `json:"profile_photo,omitempty"`
 }
 
 func (request *UserProfileRequest) Initiate(c *gin.Context, key string) (*context.Context, error) {
@@ -41,10 +41,6 @@ func (request *UserProfileRequest) Validate(ctx *context.Context) error {
 		return errors.New("enter college name")
 	}
 
-	if len(request.TechStacks) <= 0 {
-		return errors.New("enter tech stack")
-	}
-
 	if !utils.IsValidPhone(request.Phone) {
 		return errors.New("enter a valid phone number")
 	}
@@ -53,7 +49,7 @@ func (request *UserProfileRequest) Validate(ctx *context.Context) error {
 		return errors.New("enter a valid email")
 	}
 
-	if request.Age <= 5 {
+	if request.Age != 0 && request.Age <= 5 {
 		return errors.New("age should be greater than 5")
 	}
 
