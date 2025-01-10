@@ -1,8 +1,8 @@
 package services
 
 import (
+	base "Hackmate/Base"
 	constants "Hackmate/Constants"
-	database "Hackmate/Database"
 	env "Hackmate/Env"
 	dto "Hackmate/Model/Dto"
 	requests "Hackmate/Model/Requests"
@@ -70,9 +70,9 @@ func SendMail(ctx *context.Context, request *dto.MailInfo) error {
 }
 
 func UploadMedia(ctx *context.Context, request *requests.ImageRequest) (string, error) {
-	cld, err := database.CloudinaryConnect(ctx)
-	if err != nil {
-		return "", err
+	cld := base.CloudinaryInstance
+	if cld == nil {
+		return "", errors.New("cloudinary connection error")
 	}
 	src, err := request.Image.Open()
 	if err != nil {
