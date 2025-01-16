@@ -109,7 +109,7 @@ func VerifyUserOtp(c *gin.Context) {
 
 	verified, err := services.VerifyUserOtp(ctx, request.Email, request.Otp)
 	if err != nil || !verified {
-		c.JSON(http.StatusNotFound, response.Fail(ctx, key, err.Error(), request))
+		c.JSON(http.StatusNotFound, response.Fail(ctx, key, "not verified", request))
 		return
 	}
 

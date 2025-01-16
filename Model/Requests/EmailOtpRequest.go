@@ -9,7 +9,7 @@ import (
 )
 
 type EmailOtpRequest struct {
-	Email string `json:"email_id"`
+	Email string `json:"email"`
 	Otp   int    `json:"otp"`
 }
 

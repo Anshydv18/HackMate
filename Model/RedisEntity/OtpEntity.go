@@ -10,23 +10,22 @@ import (
 
 const EmailOtpKey = "hackmate::email"
 
-func SetOtpCache(ctx *context.Context, email string, otp int) {
+func SetOtpCache(ctx *context.Context, email string, otp int) error {
 	MainKey := fmt.Sprintf("%s:%s", EmailOtpKey, email)
 	rdb := base.RedisInstance
-	Otp, _ := json.Marshal(otp)
-	rdb.Set(*ctx, MainKey, Otp, 5*time.Minute)
+	Otp, err := json.Marshal(otp)
+	if err != nil {
+		return err
+	}
+	res := rdb.Set(*ctx, MainKey, Otp, 5*time.Minute)
+	fmt.Println(res)
+	return nil
 }
 
 func GetOtpCache(ctx *context.Context, email string) (int, error) {
 	MainKey := fmt.Sprintf("%s:%s", EmailOtpKey, email)
 	rdb := base.RedisInstance
 	value := rdb.Get(*ctx, MainKey)
-
-	fmt.Println(value)
-
-	var otp int
-	if err := json.Unmarshal([]byte(value.String()), &otp); err != nil {
-		return 0, err
-	}
+	otp, _ := value.Int()
 	return otp, nil
 }

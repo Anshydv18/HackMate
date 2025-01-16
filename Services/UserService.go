@@ -88,7 +88,8 @@ func GenerateUserOtp(ctx *context.Context, email string) error {
 	if err != nil {
 		return err
 	}
+	otp := Otp.Int64() + 100000
 
-	go SendOtpMail(ctx, email, Otp.Int64())
-	return nil
+	go SendOtpMail(ctx, email, otp)
+	return redisentity.SetOtpCache(ctx, email, int(otp))
 }
