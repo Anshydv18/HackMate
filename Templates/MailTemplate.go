@@ -23,7 +23,8 @@ HackMate`, to, by, details)
 func OtpVerificationTemplate(ctx *context.Context, otp int64) string {
 	return fmt.Sprintf(`Dear User,
 	
-Please Verify Your account Otp  %d
+Please Verify Your account 
+Otp  %d
 
 Best regards,  
 HackMate	`, otp)
