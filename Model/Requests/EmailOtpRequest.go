@@ -28,5 +28,8 @@ func (request *EmailOtpRequest) Validate(ctx *context.Context) error {
 		return errors.New("enter a valid mail")
 	}
 
+	if request.Otp >= 1000000 || request.Otp <= 100000 {
+		return errors.New("invalid otp")
+	}
 	return nil
 }

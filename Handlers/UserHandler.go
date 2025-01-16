@@ -115,3 +115,26 @@ func VerifyUserOtp(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response.Success(ctx, key, request))
 }
+
+func GenerateUserOtp(c *gin.Context) {
+	key := "Generate_User_Otp"
+	request := &requests.StringRequest{}
+	response := &response.BaseResponse{}
+	ctx, err := request.Initiate(c, key)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		return
+	}
+
+	if err := request.Validate(ctx); err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		return
+	}
+
+	if err := services.GenerateUserOtp(ctx, request.Key); err != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		return
+	}
+
+	c.JSON(http.StatusOK, response.Success(ctx, key, request))
+}

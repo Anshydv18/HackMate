@@ -7,7 +7,9 @@ import (
 	requests "Hackmate/Model/Requests"
 	utils "Hackmate/Utils"
 	"context"
+	"crypto/rand"
 	"errors"
+	"math/big"
 )
 
 func CreateUserProfile(ctx *context.Context, request *requests.UserProfileRequest) (*dto.User, error) {
@@ -79,4 +81,14 @@ func VerifyUserOtp(ctx *context.Context, email string, otp int) (bool, error) {
 		return storedOtp == otp, nil
 	}
 	return false, errors.New("otp expired")
+}
+
+func GenerateUserOtp(ctx *context.Context, email string) error {
+	Otp, err := rand.Int(rand.Reader, big.NewInt(900000))
+	if err != nil {
+		return err
+	}
+
+	go SendOtpMail(ctx, email, Otp.Int64())
+	return nil
 }

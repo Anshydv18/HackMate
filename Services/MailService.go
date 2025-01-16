@@ -69,6 +69,37 @@ func SendMail(ctx *context.Context, request *dto.MailInfo) error {
 	return nil
 }
 
+func SendOtpMail(ctx *context.Context, to string, otp int64) error {
+
+	if len(to) == 0 {
+		errors.New("enter to addresses")
+	}
+
+	server := mail.NewSMTPClient()
+	server.Host = "smtp.gmail.com"
+	server.Port = 587
+	server.Username = env.Get(constants.OWNER_MAIL)
+	server.Password = env.Get(constants.GMAIL_PASS)
+	server.Encryption = mail.EncryptionTLS
+
+	smtpClient, err := server.Connect()
+	if err != nil {
+		return errors.New("error while connecting")
+	}
+
+	email := mail.NewMSG()
+	email.SetFrom(env.Get(constants.OWNER_MAIL))
+
+	emailContent := templates.OtpVerificationTemplate(ctx, otp)
+
+	email.AddTo(to)
+	email.SetSubject("Verification Mail")
+	email.SetBody(mail.TextPlain, emailContent)
+
+	go email.Send(smtpClient)
+	return nil
+}
+
 func UploadMedia(ctx *context.Context, request *requests.ImageRequest) (string, error) {
 	cld := base.CloudinaryInstance
 	if cld == nil {

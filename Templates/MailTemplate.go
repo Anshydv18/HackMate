@@ -19,3 +19,12 @@ Should you have any questions or concerns, do not hesitate to contact us.
 Best regards,  
 HackMate`, to, by, details)
 }
+
+func OtpVerificationTemplate(ctx *context.Context, otp int64) string {
+	return fmt.Sprintf(`Dear User,
+	
+Please Verify Your account Otp  %d
+
+Best regards,  
+HackMate	`, otp)
+}

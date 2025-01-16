@@ -14,7 +14,7 @@ func SetOtpCache(ctx *context.Context, email string, otp int) {
 	MainKey := fmt.Sprintf("%s:%s", EmailOtpKey, email)
 	rdb := base.RedisInstance
 	Otp, _ := json.Marshal(otp)
-	rdb.Set(*ctx, MainKey, Otp, 5*time.Second)
+	rdb.Set(*ctx, MainKey, Otp, 5*time.Minute)
 }
 
 func GetOtpCache(ctx *context.Context, email string) (int, error) {
