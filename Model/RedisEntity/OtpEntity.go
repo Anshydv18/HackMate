@@ -17,8 +17,7 @@ func SetOtpCache(ctx *context.Context, email string, otp int) error {
 	if err != nil {
 		return err
 	}
-	res := rdb.Set(*ctx, MainKey, Otp, 5*time.Minute)
-	fmt.Println(res)
+	rdb.Set(*ctx, MainKey, Otp, 5*time.Minute)
 	return nil
 }
 
