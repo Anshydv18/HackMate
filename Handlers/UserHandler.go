@@ -90,3 +90,28 @@ func GetUserDetails(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response.Success(ctx, key, data))
 }
+
+func VerifyUserOtp(c *gin.Context) {
+	key := "Verify_User_Otp"
+	request := &requests.EmailOtpRequest{}
+	response := &response.BaseResponse{}
+
+	ctx, err := request.Initiate(c, key)
+	if err != nil {
+		c.JSON(http.StatusOK, response.Fail(ctx, key, err.Error(), request))
+		return
+	}
+
+	if err := request.Validate(ctx); err != nil {
+		c.JSON(http.StatusOK, response.Fail(ctx, key, err.Error(), request))
+		return
+	}
+
+	verified, err := services.VerifyUserOtp(ctx, request.Email, request.Otp)
+	if err != nil || !verified {
+		c.JSON(http.StatusNotFound, response.Fail(ctx, key, err.Error(), request))
+		return
+	}
+
+	c.JSON(http.StatusOK, response.Success(ctx, key, request))
+}

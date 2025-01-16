@@ -33,7 +33,7 @@ func SendMessage(c *gin.Context) {
 }
 
 func UploadMedia(c *gin.Context) {
-	key := "upload photo"
+	key := "upload_Media"
 	request := &requests.ImageRequest{}
 	response := &response.StringResponse{}
 	ctx, err := request.Initiate(c, key)

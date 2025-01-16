@@ -15,11 +15,12 @@ func UserRoutes(router *gin.Engine) {
 	userAPI.POST("/login", handlers.Login)
 	userAPI.POST("/sendMail", handlers.SendMessage)
 	userAPI.POST("/uploadMedia", handlers.UploadMedia)
+	userAPI.POST("/verifyOtp", handlers.VerifyUserOtp)
 
 	protectedRoutes := userAPI.Group("private")
 	protectedRoutes.Use(middlewares.Authenticate())
 	protectedRoutes.GET("/getdetails", handlers.GetUserDetails)
 
 	HackathonRoutes := openRoutes.Group("/Posts")
-	HackathonRoutes.POST("/Create", handlers.CreateHackPost)
+	HackathonRoutes.POST("/create", handlers.CreateHackPost)
 }

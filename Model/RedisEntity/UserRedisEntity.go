@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const UserRedisKey = "user"
+const UserRedisKey = "hackmate::user"
 
 func SetUserCache(ctx *context.Context, Key string, data *dto.User) {
 	key := fmt.Sprintf("%s:%s", UserRedisKey, Key)

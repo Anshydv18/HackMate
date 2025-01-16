@@ -58,6 +58,7 @@ func GetUserByEmail(ctx *context.Context, email string) (*dto.User, error) {
 	if !utils.IsValidEmail(email) {
 		return nil, errors.New("not a valid email")
 	}
+
 	userData, _ := redisentity.GetUserFromCache(ctx, email)
 	if userData != nil {
 		return userData, nil
@@ -70,4 +71,12 @@ func GetUserByEmail(ctx *context.Context, email string) (*dto.User, error) {
 
 	go redisentity.SetUserCache(ctx, data.Email, data)
 	return data, nil
+}
+
+func VerifyUserOtp(ctx *context.Context, email string, otp int) (bool, error) {
+	storedOtp, _ := redisentity.GetOtpCache(ctx, email)
+	if storedOtp != 0 {
+		return storedOtp == otp, nil
+	}
+	return false, errors.New("otp expired")
 }
