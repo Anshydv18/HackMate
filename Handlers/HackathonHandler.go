@@ -14,11 +14,13 @@ func CreateHackPost(c *gin.Context) {
 	response := &response.BaseResponse{}
 	ctx, err := request.Initiate(c, Key)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, Key, err.Error(), request))
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, Key, err, request))
 		return
 	}
 
 	if err := request.Validate(ctx); err != nil {
-
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, Key, err, request))
+		return
 	}
+
 }

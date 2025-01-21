@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	hmerrors "Hackmate/Model/Errors"
 	response "Hackmate/Model/Response"
 	utils "Hackmate/Utils"
 	"context"
@@ -18,7 +19,7 @@ func Authenticate() gin.HandlerFunc {
 		response := response.BaseResponse{}
 		token_str, err := c.Cookie("auth_token")
 		if err != nil {
-			c.JSON(http.StatusUnauthorized, response.Fail(&ctx, "authenticate", "unauthorized person", ""))
+			c.JSON(http.StatusUnauthorized, response.Fail(&ctx, "authenticate", hmerrors.InvalidInputError(&ctx, "unauthorized person", ""), ""))
 			c.Abort()
 			return
 		}
@@ -31,7 +32,7 @@ func Authenticate() gin.HandlerFunc {
 		})
 
 		if err != nil || !tokenJWT.Valid {
-			c.JSON(http.StatusUnauthorized, response.Fail(&ctx, "authenticate", "unauthorized person", ""))
+			c.JSON(http.StatusUnauthorized, response.Fail(&ctx, "authenticate", hmerrors.InvalidInputError(&ctx, "unauthorized person", ""), ""))
 			c.Abort()
 			return
 		}

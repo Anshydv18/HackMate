@@ -4,7 +4,7 @@ import (
 	base "Hackmate/Base"
 	constants "Hackmate/Constants"
 	dto "Hackmate/Model/Dto"
-	"errors"
+	hmerrors "Hackmate/Model/Errors"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/net/context"
@@ -19,10 +19,10 @@ type User struct {
 	Age       int
 }
 
-func (request *User) CreateUser(ctx *context.Context) error {
+func (request *User) CreateUser(ctx *context.Context) *hmerrors.Bderror {
 	dbclient := base.DatabaseInstance
 	if dbclient == nil {
-		return errors.New("client error")
+		return hmerrors.InvalidInputError(ctx, "client error", request)
 	}
 
 	collection := dbclient.Database(constants.DB_NAME).Collection(constants.COLLECTION_USERS)
@@ -37,16 +37,16 @@ func (request *User) CreateUser(ctx *context.Context) error {
 
 	_, er := collection.InsertOne(*ctx, document)
 	if er != nil {
-		return er
+		return hmerrors.InvalidInputError(ctx, er.Error(), request)
 	}
 
 	return nil
 }
 
-func GetUserDetails(ctx *context.Context, phone string) (*dto.User, error) {
+func GetUserDetails(ctx *context.Context, phone string) (*dto.User, *hmerrors.Bderror) {
 	dbclient := base.DatabaseInstance
 	if dbclient == nil {
-		return nil, errors.New("client error")
+		return nil, hmerrors.InvalidInputError(ctx, "client error", phone)
 	}
 
 	collection := dbclient.Database(constants.DB_NAME).Collection(constants.COLLECTION_USERS)
@@ -59,16 +59,16 @@ func GetUserDetails(ctx *context.Context, phone string) (*dto.User, error) {
 	var user dto.User
 	er := res.Decode(&user)
 	if er != nil {
-		return nil, er
+		return nil, hmerrors.InvalidInputError(ctx, er.Error(), phone)
 	}
 
 	return &user, nil
 }
 
-func GetUserDetailsWithEmail(ctx *context.Context, email string) (*dto.User, error) {
+func GetUserDetailsWithEmail(ctx *context.Context, email string) (*dto.User, *hmerrors.Bderror) {
 	dbclient := base.DatabaseInstance
 	if dbclient == nil {
-		return nil, errors.New("client error")
+		return nil, hmerrors.InvalidInputError(ctx, "client error", email)
 	}
 
 	collection := dbclient.Database(constants.DB_NAME).Collection(constants.COLLECTION_USERS)
@@ -81,7 +81,7 @@ func GetUserDetailsWithEmail(ctx *context.Context, email string) (*dto.User, err
 	var user dto.User
 	er := res.Decode(&user)
 	if er != nil {
-		return nil, er
+		return nil, hmerrors.InvalidInputError(ctx, er.Error(), email)
 	}
 
 	return &user, nil

@@ -3,16 +3,16 @@ package services
 import (
 	dto "Hackmate/Model/Dto"
 	entity "Hackmate/Model/Entity"
+	hmerrors "Hackmate/Model/Errors"
 	redisentity "Hackmate/Model/RedisEntity"
 	requests "Hackmate/Model/Requests"
 	utils "Hackmate/Utils"
 	"context"
 	"crypto/rand"
-	"errors"
 	"math/big"
 )
 
-func CreateUserProfile(ctx *context.Context, request *requests.UserProfileRequest) (*dto.User, error) {
+func CreateUserProfile(ctx *context.Context, request *requests.UserProfileRequest) (*dto.User, *hmerrors.Bderror) {
 
 	UserEntity := entity.User{
 		Name:      request.Name,
@@ -41,7 +41,7 @@ func CreateUserProfile(ctx *context.Context, request *requests.UserProfileReques
 	return &UserDto, nil
 }
 
-func Login(ctx *context.Context, phone string) (*dto.User, error) {
+func Login(ctx *context.Context, phone string) (*dto.User, *hmerrors.Bderror) {
 	userData, _ := redisentity.GetUserFromCache(ctx, phone)
 	if userData != nil {
 		return userData, nil
@@ -56,9 +56,9 @@ func Login(ctx *context.Context, phone string) (*dto.User, error) {
 	return data, nil
 }
 
-func GetUserByEmail(ctx *context.Context, email string) (*dto.User, error) {
+func GetUserByEmail(ctx *context.Context, email string) (*dto.User, *hmerrors.Bderror) {
 	if !utils.IsValidEmail(email) {
-		return nil, errors.New("not a valid email")
+		return nil, hmerrors.InvalidInputError(ctx, "not a valid email", email)
 	}
 
 	userData, _ := redisentity.GetUserFromCache(ctx, email)
@@ -75,18 +75,18 @@ func GetUserByEmail(ctx *context.Context, email string) (*dto.User, error) {
 	return data, nil
 }
 
-func VerifyUserOtp(ctx *context.Context, email string, otp int) (bool, error) {
+func VerifyUserOtp(ctx *context.Context, email string, otp int) (bool, *hmerrors.Bderror) {
 	storedOtp, _ := redisentity.GetOtpCache(ctx, email)
 	if storedOtp != 0 {
 		return storedOtp == otp, nil
 	}
-	return false, errors.New("otp expired")
+	return false, hmerrors.InvalidInputError(ctx, "otp expired", email)
 }
 
-func GenerateUserOtp(ctx *context.Context, email string) error {
+func GenerateUserOtp(ctx *context.Context, email string) *hmerrors.Bderror {
 	Otp, err := rand.Int(rand.Reader, big.NewInt(900000))
 	if err != nil {
-		return err
+		return hmerrors.InvalidInputError(ctx, "otp", email)
 	}
 	otp := Otp.Int64() + 100000
 

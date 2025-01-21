@@ -1,20 +1,22 @@
 package response
 
 import (
+	errors "Hackmate/Model/Errors"
 	"context"
 )
 
 type BaseResponse struct {
-	Status    bool        `json:"status"`
-	Message   string      `json:"message ,omitempty"`
-	ErrorType string      `json:"error_type ,omitempty"`
-	Request   interface{} `json:"request"`
+	Status  bool            `json:"status"`
+	Message string          `json:"message ,omitempty"`
+	Error   *errors.Bderror `json:"error_type ,omitempty"`
+	Request interface{}     `json:"request"`
 }
 
-func (r *BaseResponse) Fail(ctx *context.Context, key string, error string, request interface{}) *BaseResponse {
+func (r *BaseResponse) Fail(ctx *context.Context, key string, error *errors.Bderror, request interface{}) *BaseResponse {
 	r.Status = false
-	r.Message = error
+	r.Message = error.Message
 	r.Request = request
+	r.Error = error
 	return r
 }
 

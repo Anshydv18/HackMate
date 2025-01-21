@@ -1,6 +1,7 @@
 package response
 
 import (
+	hmerrors "Hackmate/Model/Errors"
 	"context"
 )
 
@@ -9,10 +10,10 @@ type StringResponse struct {
 	BaseResponse
 }
 
-func (response *StringResponse) Fail(ctx *context.Context, key string, error string, request interface{}) *StringResponse {
+func (response *StringResponse) Fail(ctx *context.Context, key string, error *hmerrors.Bderror, request interface{}) *StringResponse {
 	response.Status = false
 	response.Message = key
-	response.ErrorType = error
+	response.Error = error
 	response.Request = request
 	return response
 }

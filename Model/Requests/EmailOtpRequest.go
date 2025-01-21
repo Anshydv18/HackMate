@@ -1,9 +1,9 @@
 package requests
 
 import (
+	hmerrors "Hackmate/Model/Errors"
 	utils "Hackmate/Utils"
 	"context"
-	"errors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,23 +13,23 @@ type EmailOtpRequest struct {
 	Otp   int    `json:"otp"`
 }
 
-func (request *EmailOtpRequest) Initiate(c *gin.Context, key string) (*context.Context, error) {
+func (request *EmailOtpRequest) Initiate(c *gin.Context, key string) (*context.Context, *hmerrors.Bderror) {
 	_ctx, _ := c.Get("context")
 	ctx := _ctx.(context.Context)
 
 	if err := c.BindJSON(request); err != nil {
-		return &ctx, err
+		return &ctx, hmerrors.InvalidInputError(&ctx, key, request)
 	}
 	return &ctx, nil
 }
 
-func (request *EmailOtpRequest) Validate(ctx *context.Context) error {
+func (request *EmailOtpRequest) Validate(ctx *context.Context) *hmerrors.Bderror {
 	if !utils.IsValidEmail(request.Email) {
-		return errors.New("enter a valid mail")
+		return hmerrors.InvalidInputError(ctx, "enter a valid mail", request)
 	}
 
 	if request.Otp >= 1000000 || request.Otp <= 100000 {
-		return errors.New("invalid otp")
+		return hmerrors.InvalidInputError(ctx, "invalid otp", request)
 	}
 	return nil
 }

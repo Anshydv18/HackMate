@@ -2,6 +2,7 @@ package redisentity
 
 import (
 	base "Hackmate/Base"
+	hmerrors "Hackmate/Model/Errors"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -10,12 +11,12 @@ import (
 
 const EmailOtpKey = "hackmate::email"
 
-func SetOtpCache(ctx *context.Context, email string, otp int) error {
+func SetOtpCache(ctx *context.Context, email string, otp int) *hmerrors.Bderror {
 	MainKey := fmt.Sprintf("%s:%s", EmailOtpKey, email)
 	rdb := base.RedisInstance
 	Otp, err := json.Marshal(otp)
 	if err != nil {
-		return err
+		return hmerrors.InvalidInputError(ctx, "set cache", email)
 	}
 	rdb.Set(*ctx, MainKey, Otp, 5*time.Minute)
 	return nil

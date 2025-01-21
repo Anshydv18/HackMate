@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	hmerrors "Hackmate/Model/Errors"
 	requests "Hackmate/Model/Requests"
 	response "Hackmate/Model/Response"
 	services "Hackmate/Services"
@@ -55,9 +56,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	jwtToken, err := utils.GenerateJWTkey(request.Phone)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, err, key, request))
+	jwtToken, er := utils.GenerateJWTkey(request.Phone)
+	if er != nil {
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, hmerrors.InvalidInputError(ctx, key, request), er.Error(), request))
 		return
 	}
 
@@ -98,18 +99,18 @@ func VerifyUserOtp(c *gin.Context) {
 
 	ctx, err := request.Initiate(c, key)
 	if err != nil {
-		c.JSON(http.StatusOK, response.Fail(ctx, key, err.Error(), request))
+		c.JSON(http.StatusOK, response.Fail(ctx, key, err, request))
 		return
 	}
 
 	if err := request.Validate(ctx); err != nil {
-		c.JSON(http.StatusOK, response.Fail(ctx, key, err.Error(), request))
+		c.JSON(http.StatusOK, response.Fail(ctx, key, err, request))
 		return
 	}
 
 	verified, err := services.VerifyUserOtp(ctx, request.Email, request.Otp)
 	if err != nil || !verified {
-		c.JSON(http.StatusNotFound, response.Fail(ctx, key, "not verified", request))
+		c.JSON(http.StatusNotFound, response.Fail(ctx, key, err, request))
 		return
 	}
 
@@ -122,17 +123,17 @@ func GenerateUserOtp(c *gin.Context) {
 	response := &response.BaseResponse{}
 	ctx, err := request.Initiate(c, key)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err, request))
 		return
 	}
 
 	if err := request.Validate(ctx); err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err, request))
 		return
 	}
 
 	if err := services.GenerateUserOtp(ctx, request.Key); err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err, request))
 		return
 	}
 

@@ -2,6 +2,7 @@ package response
 
 import (
 	dto "Hackmate/Model/Dto"
+	hmerrors "Hackmate/Model/Errors"
 	"context"
 )
 
@@ -10,9 +11,9 @@ type UserResponse struct {
 	BaseResponse
 }
 
-func (response *UserResponse) Fail(ctx *context.Context, Error error, key string, request interface{}) *UserResponse {
+func (response *UserResponse) Fail(ctx *context.Context, error *hmerrors.Bderror, key string, request interface{}) *UserResponse {
 	response.Status = false
-	response.ErrorType = Error.Error()
+	response.Error = error
 	response.Message = key
 	response.Request = request
 	return response

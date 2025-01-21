@@ -5,6 +5,7 @@ import (
 	constants "Hackmate/Constants"
 	env "Hackmate/Env"
 	dto "Hackmate/Model/Dto"
+	hmerrors "Hackmate/Model/Errors"
 	requests "Hackmate/Model/Requests"
 	templates "Hackmate/Templates"
 	"context"
@@ -14,7 +15,7 @@ import (
 	mail "github.com/xhit/go-simple-mail/v2"
 )
 
-func SendMailService(ctx *context.Context, request *requests.MailRequest) error {
+func SendMailService(ctx *context.Context, request *requests.MailRequest) *hmerrors.Bderror {
 
 	MailDetails := &dto.MailInfo{
 		SenderName:     request.SenderName,
@@ -27,7 +28,7 @@ func SendMailService(ctx *context.Context, request *requests.MailRequest) error 
 	if MailDetails.ReciverName == "" {
 		UserDetail, err := GetUserByEmail(ctx, request.Mail[0])
 		if err != nil {
-			return errors.New("email fetching failed")
+			return err
 		}
 		MailDetails.ReciverName = UserDetail.Name
 	}
@@ -100,22 +101,23 @@ func SendOtpMail(ctx *context.Context, to string, otp int64) error {
 	return nil
 }
 
-func UploadMedia(ctx *context.Context, request *requests.ImageRequest) (string, error) {
+func UploadMedia(ctx *context.Context, request *requests.ImageRequest) (string, *hmerrors.Bderror) {
 	cld := base.CloudinaryInstance
 	if cld == nil {
-		return "", errors.New("cloudinary connection error")
+		return "", hmerrors.InvalidInputError(ctx, "connection failed with cloudinary", request)
 	}
+
 	src, err := request.Image.Open()
 	if err != nil {
-		return "", err
+		return "", hmerrors.InvalidInputError(ctx, err.Error(), request)
 	}
 
 	resp, err := cld.Upload.Upload(*ctx, src, uploader.UploadParams{
 		PublicID: "profile" + request.Image.Filename,
 	})
-
 	if err != nil {
-		return "", err
+		return "", hmerrors.InvalidInputError(ctx, err.Error(), request)
 	}
+
 	return resp.SecureURL, nil
 }

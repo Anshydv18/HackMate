@@ -1,8 +1,8 @@
 package requests
 
 import (
+	hmerrors "Hackmate/Model/Errors"
 	"context"
-	"errors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,21 +15,21 @@ type MailRequest struct {
 	Status         int      `json:"status"`
 }
 
-func (request *MailRequest) Initiate(c *gin.Context, key string) (*context.Context, error) {
+func (request *MailRequest) Initiate(c *gin.Context, key string) (*context.Context, *hmerrors.Bderror) {
 	_ctx, _ := c.Get("context")
 	ctx := _ctx.(context.Context)
 
 	if err := c.ShouldBindJSON(&request); err != nil {
-		return nil, errors.New("failed while binding request")
+		return nil, hmerrors.InvalidInputError(&ctx, key, request)
 	}
 
 	return &ctx, nil
 }
 
-func (request *MailRequest) Validate(ctx *context.Context) error {
+func (request *MailRequest) Validate(ctx *context.Context) *hmerrors.Bderror {
 
 	if len(request.Mail) == 0 {
-		return errors.New("enter a valid email")
+		return hmerrors.InvalidInputError(ctx, "reciever mail cannot be empty", request)
 	}
 	return nil
 }

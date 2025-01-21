@@ -2,9 +2,9 @@ package requests
 
 import (
 	dto "Hackmate/Model/Dto"
+	hmerrors "Hackmate/Model/Errors"
 	utils "Hackmate/Utils"
 	"context"
-	"errors"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,36 +21,36 @@ type UserProfileRequest struct {
 	ProfilePhoto  string          `json:"profile_photo,omitempty"`
 }
 
-func (request *UserProfileRequest) Initiate(c *gin.Context, key string) (*context.Context, error) {
+func (request *UserProfileRequest) Initiate(c *gin.Context, key string) (*context.Context, *hmerrors.Bderror) {
 	_ctx, _ := c.Get("context")
 	ctx := _ctx.(context.Context)
 
 	if err := c.ShouldBindJSON(&request); err != nil {
-		return nil, err
+		return nil, hmerrors.InvalidInputError(&ctx, err.Error(), request)
 	}
 
 	return &ctx, nil
 }
 
-func (request *UserProfileRequest) Validate(ctx *context.Context) error {
+func (request *UserProfileRequest) Validate(ctx *context.Context) *hmerrors.Bderror {
 	if len(request.Name) < 3 {
-		return errors.New("enter a valid name")
+		return hmerrors.InvalidInputError(ctx, "enter a valid name", request)
 	}
 
 	if len(request.College) <= 3 {
-		return errors.New("enter college name")
+		return hmerrors.InvalidInputError(ctx, "enter college name", request)
 	}
 
 	if !utils.IsValidPhone(request.Phone) {
-		return errors.New("enter a valid phone number")
+		return hmerrors.InvalidInputError(ctx, "enter a valid phone number", request)
 	}
 
 	if !utils.IsValidEmail(request.Email) {
-		return errors.New("enter a valid email")
+		return hmerrors.InvalidInputError(ctx, "enter a valid email", request)
 	}
 
 	if request.Age != 0 && request.Age <= 5 {
-		return errors.New("age should be greater than 5")
+		return hmerrors.InvalidInputError(ctx, "age should be greater than 5", request)
 	}
 
 	return nil

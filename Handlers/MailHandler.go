@@ -15,17 +15,17 @@ func SendMessage(c *gin.Context) {
 	response := &response.BaseResponse{}
 	ctx, err := request.Initiate(c, key)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, "initiation", request))
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err, request))
 		return
 	}
 
 	if err := request.Validate(ctx); err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, "initiation", request))
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err, request))
 		return
 	}
 
 	if err := services.SendMailService(ctx, request); err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err, request))
 		return
 	}
 
@@ -38,18 +38,18 @@ func UploadMedia(c *gin.Context) {
 	response := &response.StringResponse{}
 	ctx, err := request.Initiate(c, key)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err, request))
 		return
 	}
 
 	if err := request.Validate(ctx); err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err, request))
 		return
 	}
 
 	url, err := services.UploadMedia(ctx, request)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err.Error(), request))
+		c.JSON(http.StatusBadRequest, response.Fail(ctx, key, err, request))
 		return
 	}
 
