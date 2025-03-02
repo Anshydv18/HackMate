@@ -16,6 +16,7 @@ const ( //dbcrediantials
 
 const (
 	COLLECTION_USERS = "users"
+	COLLECTION_POSTS = "posts"
 )
 
 var MailHeader = map[int]string{

@@ -12,7 +12,7 @@ type BaseResponse struct {
 	Request interface{}     `json:"request"`
 }
 
-func (r *BaseResponse) Fail(ctx *context.Context, key string, error *errors.Bderror, request interface{}) *BaseResponse {
+func (r *BaseResponse) Fail(ctx *context.Context, key string, error *errors.Bderror, request ...interface{}) *BaseResponse {
 	r.Status = false
 	r.Message = error.Message
 	r.Request = request
@@ -20,7 +20,7 @@ func (r *BaseResponse) Fail(ctx *context.Context, key string, error *errors.Bder
 	return r
 }
 
-func (r *BaseResponse) Success(ctx *context.Context, key string, request interface{}) *BaseResponse {
+func (r *BaseResponse) Success(ctx *context.Context, key string, request ...interface{}) *BaseResponse {
 	r.Status = true
 	r.Message = "Success"
 	return r

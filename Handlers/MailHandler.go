@@ -55,3 +55,4 @@ func UploadMedia(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response.Success(ctx, key, url))
 }
+

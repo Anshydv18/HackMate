@@ -1,21 +1,16 @@
 package requests
 
 import (
+	dto "Hackmate/Model/Dto"
 	Error "Hackmate/Model/Errors"
 	"context"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 type HackPostRequest struct {
-	Name          string    `json:"name"`
-	DateTime      time.Time `json:"dateTime"`
-	Location      string    `json:"location"`
-	Description   string    `json:"description"`
-	Theme         string    `json:"theme"`
-	TeamSizeLimit int       `json:"teamSizeLimit"`
+	*dto.HackathonPost
 }
 
 func (request *HackPostRequest) Initiate(c *gin.Context, key string) (*context.Context, *Error.Bderror) {
